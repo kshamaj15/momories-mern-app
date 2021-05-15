@@ -12,6 +12,19 @@ const app = express();
 // middlewares
 app.use(bodyParser.json({limit: '30mb', extended: true}));
 app.use(bodyParser.urlencoded({limit: '30mb', extended: true}));
+app.use((req, res, next) => {
+    if(!req.url.includes('/auth/login')) {
+        const token = req.headers['authorization'];
+        const accessToken = token && token.split(' ')[1];
+        if(!accessToken) return res.status(401).json({message: 'Please send valid access token'});
+    
+        jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+            if(err) return res.status(403).json({message: 'Please send valid access token'});
+            req.user = user;
+        })
+    }
+    next();
+})
 // app.use(cors);
 
 // routes
