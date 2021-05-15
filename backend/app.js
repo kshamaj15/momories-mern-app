@@ -2,8 +2,10 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
+import jwt from 'jsonwebtoken';
 
 import postRoutes from './routes/posts.js';
+import authRoutes from './routes/auth.js';
 
 const app = express();
 
@@ -14,6 +16,7 @@ app.use(bodyParser.urlencoded({limit: '30mb', extended: true}));
 
 // routes
 app.use('/posts', postRoutes)
+app.use('/auth', authRoutes)
 
 const DB_URL = 'mongodb+srv://kshamaj15:kshama100@cluster0.t5ojz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 
